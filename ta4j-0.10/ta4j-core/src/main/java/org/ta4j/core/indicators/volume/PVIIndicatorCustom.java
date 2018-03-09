@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2014-2017 Marc de Verdelhan & respective authors (see AUTHORS)
+ * @author tsogoo_uuganbaatar
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -22,37 +22,30 @@
  */
 package org.ta4j.core.indicators.volume;
 
-import org.ta4j.core.Decimal;
 import org.ta4j.core.TimeSeries;
-import org.ta4j.core.indicators.RecursiveCachedIndicator;
 
 /**
- * On-balance volume indicator.
- * @see http://traderhq.com/analyzing-trading-volume-ultimate-guide/
+ * Positive Volume Index (PVI) indicator.
  * <p>
+ * @see http://www.metastock.com/Customer/Resources/TAAZ/Default.aspx?p=92
+ * @see http://www.investopedia.com/terms/p/pvi.asp
  */
-public class OnBalanceVolumeIndicator extends RecursiveCachedIndicator<Decimal> {
+public class PVIIndicatorCustom extends PVIIndicator {
 
-    private final TimeSeries series;
-
-    public OnBalanceVolumeIndicator(TimeSeries series) {
+    public PVIIndicatorCustom(TimeSeries series) {
         super(series);
-        this.series = series;
     }
-
-    @Override
-    protected Decimal calculate(int index) {
+    
+    public double PVIPercent(int index, int percent){
         if (index == 0) {
-            return Decimal.ZERO;
+            return -1;
         }
-        Decimal yesterdayClose = series.getTick(index - 1).getClosePrice();
-        Decimal todayClose = series.getTick(index).getClosePrice();
-
-        if (yesterdayClose.isGreaterThan(todayClose)) {
-            return getValue(index - 1).minus(series.getTick(index).getVolume());
-        } else if (yesterdayClose.isLessThan(todayClose)) {
-            return getValue(index - 1).plus(series.getTick(index).getVolume());
+        double currentValue = this.getValue(index).toDouble();
+        double previousValue = this.getValue(index-1).toDouble();
+        double cal_percent = (1 - (previousValue / currentValue)) * 100;
+        if(cal_percent >= percent){
+        	return cal_percent;
         }
-        return getValue(index - 1);
+        return -1;
     }
 }

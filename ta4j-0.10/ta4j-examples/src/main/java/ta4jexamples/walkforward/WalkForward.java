@@ -148,6 +148,7 @@ public class WalkForward {
         strategies.put(CCICorrectionStrategy.buildStrategy(series), "CCI Correction");
         strategies.put(GlobalExtremaStrategy.buildStrategy(series), "Global Extrema");
         strategies.put(MovingMomentumStrategy.buildStrategy(series), "Moving Momentum");
+        //strategies.put(IchimokuStrategy.buildStrategy(series), "Ichimoku");
         strategies.put(RSI2Strategy.buildStrategy(series), "RSI-2");
         return strategies;
     }

@@ -62,6 +62,10 @@ public class MovingMomentumStrategy {
         MACDIndicator macd = new MACDIndicator(closePrice, 9, 26);
         EMAIndicator emaMacd = new EMAIndicator(macd, 18);
         
+        for(int i = 0; i < stochasticOscillK.getTimeSeries().getEndIndex(); i++){
+        	System.out.println(series.getTick(i).getEndTime() + " OscillK:" + stochasticOscillK.getValue(i));
+        }
+        
         // Entry rule
         Rule entryRule = new OverIndicatorRule(shortEma, longEma) // Trend
                 .and(new CrossedDownIndicatorRule(stochasticOscillK, Decimal.valueOf(20))) // Signal 1
